@@ -35,11 +35,13 @@ if (validuser.length > 0) {
 }
 
 //only registered users can login
-regd_users.post("customer/login", (req,res) => {
+regd_users.post("/login", (req,res) => {
   //Write your code here
-
+  console.log(username, password);
   const username = req.body.username;
   const password = req.body.password;
+  
+
 
   if (!username || !password) {
       return res.status(404).json({ message: "Error while logging in" });
