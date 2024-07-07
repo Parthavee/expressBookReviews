@@ -40,7 +40,7 @@ regd_users.post("/login", (req,res) => {
   
   const username = req.body.username;
   const password = req.body.password;
-  console.log(username, password);
+  
 
   if (!username || !password) {
       return res.status(404).json({ message: "Error while logging in" });
@@ -63,17 +63,35 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
 
   const isbn = req.params.isbn;
-  const review = req.query.review;
+  const review = req.body.review;
   const username = req.session.authorization['username'];
 
   if( books[isbn] ) {
     let book = books[isbn];
     book.reviews[username] = review;
-    return res.status(200).send("Review posted!");
+    return res.status(200).send("Review added/modified successfully!");
   } else {
     return res.status(400).json({ message: `ISBN ${isbn} not found!` });
   }
 
+
+});
+
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+
+    const isbn = req.params.isbn;
+    const username = req.session.authorization['username'];
+
+    if(books[isbn]) {
+        const book = books[isbn];
+        delete book.reviews[username];
+
+        books[isbn].reviews = book.reviews;
+        
+
+        return res.status(200).send("Review deleted successfully!");
+
+    }
 
 });
 
