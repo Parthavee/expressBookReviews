@@ -15,17 +15,18 @@ app.use("/customer/auth/*", function auth(req,res,next){
 
 if(req.session.authorization) {
     let token = req.session.authorization['accessToken'];
+    console.log("Reached here at session!");
 
     jwt.verify(token, "access", (err, user)=> {
         if(!err) {
             req.user = user;
             next();
         } else {
-            res.err(403).json({ message: "User not authorized!" });
+            res.status(403).json({ message: "User not authorized!" });
         }
     });
 } else {
-    res.err(403).json({ message: "User not logged in!" });
+    res.status(403).json({ message: "User not logged in!" });
 }
 
 });
