@@ -60,27 +60,46 @@ public_users.get('/isbn/:isbn', async function (req, res) {
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-
   const author = req.params.author;
-
-  const booksKey = Object.values(books);
-  const book = booksKey.filter((item) => item.author === author);
-
-  res.send(JSON.stringify(book, null, 4));
   
+  let getAuthor = new Promise((resolve, reject) => {
+    const booksKey = Object.values(books);
+    const book = booksKey.filter((item) => item.author === author);
+    if(book.length > 0) {
+        resolve(book);
+    } else {
+        reject({ message: "Author not found!"})
+    }
+  });
+
+  getAuthor.then((book) => {
+    res.status(200).send(JSON.stringify(book, null, 4));
+  }).catch((err) => {
+    res.status(404).json({ message: err.message });
+  })
 
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
- 
   const title = req.params.title;
 
-  const booksKey = Object.values(books);
-  const book = booksKey.filter((item) => item.title === title);
+  let getTitle = new Promise((resolve, reject) => {
+    const booksKey = Object.values(books);
+    const book = booksKey.filter((item) => item.title === title);
+    if(book.length > 0) {
+        resolve(book);
+    } else {
+        reject({ message: "Title not found!"})
+    }
+  });
 
-  res.send(JSON.stringify(book, null, 4));
+  getTitle.then((book) => {
+    res.status(200).send(JSON.stringify(book, null, 4));
+  }).catch((err) => {
+    res.status(404).json({ message: err.message });
+  })
 
 });
 
